@@ -1,49 +1,63 @@
 # ParkPass — агрегатор бронирования тематических парков
 
-**ParkPass** — современная веб-платформа для поиска, сравнения и бронирования билетов в тематические парки и на аттракционы по всему миру.
+**ParkPass** — веб-платформа для поиска, сравнения и бронирования билетов в тематические парки.
 
-> Дипломный проект: веб-разработка (IT)  
-> Авторы: Дархан, Шамиль  
-> GitHub: [sosivvodnic40](https://github.com/sosivvodnic40)
+> Дипломный проект · Дархан, Шамиль  
+> Репозиторий: [github.com/sosivvodnic40/parkpass](https://github.com/sosivvodnic40/parkpass)
 
-## Документация
+## Страницы приложения
 
-| Документ | Описание |
-|----------|----------|
-| [docs/CONCEPT.md](docs/CONCEPT.md) | Полная концепция, UX/UI, функционал, монетизация |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Техническая архитектура и API |
-| [database/schema.sql](database/schema.sql) | Схема PostgreSQL |
-
-## Стек
-
-- **Frontend:** Next.js 14, React, TypeScript, Tailwind CSS
-- **Backend:** Node.js, NestJS, REST API, JWT
-- **БД:** PostgreSQL, Prisma ORM
+| URL | Описание |
+|-----|----------|
+| `/` | Главная — поиск, featured-парки, категории |
+| `/parks` | Каталог с фильтрами |
+| `/parks/[slug]` | Страница парка — билеты, аттракционы |
+| `/checkout` | Оформление бронирования |
+| `/auth` | Вход / регистрация |
+| `/account` | Личный кабинет |
+| `/favorites` | Избранное |
+| `/admin` | Админ-панель (демо) |
 
 ## Быстрый старт
 
 ```bash
-# Backend
+# Backend (порт 4000)
 cd backend
 npm install
 npm run dev
 
-# Frontend
+# Frontend (порт 3000)
 cd frontend
 npm install
 npm run dev
 ```
 
-## Структура репозитория
+Откройте http://localhost:3000
+
+**Демо-вход:** `demo@parkpass.ru` / `demo123`
+
+## Стек
+
+- **Frontend:** Next.js 14, React, TypeScript, Tailwind CSS
+- **Backend:** Node.js, Express, JWT
+- **БД:** PostgreSQL (схема в `database/schema.sql`, demo — mock API)
+
+## Документация
+
+- [docs/CONCEPT.md](docs/CONCEPT.md) — концепция продукта
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — архитектура API
+- [docs/DIPLOMA_BRIEF.md](docs/DIPLOMA_BRIEF.md) — тезисы для защиты
+
+## API
 
 ```
-parkpass/
-├── docs/           # Концепция и архитектура
-├── frontend/       # Next.js приложение
-├── backend/        # NestJS API
-└── database/       # SQL-схема
+GET  /api/v1/parks
+GET  /api/v1/parks/:slug
+GET  /api/v1/parks/:slug/attractions
+GET  /api/v1/parks/:slug/tickets
+POST /api/v1/auth/login
+POST /api/v1/auth/register
+POST /api/v1/bookings
 ```
 
-## Лицензия
-
-Учебный проект. © 2026 ParkPass Team.
+© 2026 ParkPass Team
