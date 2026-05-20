@@ -1,120 +1,222 @@
 import { Router, Request, Response } from 'express';
 
-/**
- * ParkPass API — Parks module
- * Пример REST API на Node.js + Express
- */
-
 const router = Router();
 
-// Mock data для демонстрации (в проде — PostgreSQL через Prisma/pg)
-const parks = [
+export const parks = [
   {
     id: '1',
+    slug: 'magic-kingdom',
+    name: 'Magic Kingdom',
+    description:
+      'The most magical place on Earth with enchanting themed lands, parades, and iconic attractions for the whole family.',
+    city: 'Orlando',
+    country: 'USA',
+    region: 'Florida, USA',
+    ratingAvg: 4.9,
+    reviewCount: 15450,
+    priceFrom: 109,
+    coverImage:
+      'https://images.unsplash.com/photo-1513885541842-4b030c4d1746?w=1200&q=80',
+    category: 'magical',
+    badge: 'Хит недели',
+    isFeatured: true,
+    theme: {
+      primaryColor: '#BE185D',
+      secondaryColor: '#FBBF24',
+      particleEffect: 'stars',
+    },
+    openingHours: { mon: '09:00-22:00', tue: '09:00-22:00' },
+    zones: 6,
+  },
+  {
+    id: '2',
+    slug: 'universal-epic-universe',
+    name: 'Universal Epic Universe',
+    description:
+      'Experience the most innovative theme park ever built with immersive worlds and cutting-edge attractions.',
+    city: 'Orlando',
+    country: 'USA',
+    region: 'Florida, USA',
+    ratingAvg: 4.8,
+    reviewCount: 9200,
+    priceFrom: 119,
+    coverImage:
+      'https://images.unsplash.com/photo-1597466590660-f9a0a6e1c6e8?w=1200&q=80',
+    category: 'thrills',
+    badge: null,
+    isFeatured: true,
+    theme: {
+      primaryColor: '#4F46E5',
+      secondaryColor: '#7C3AED',
+      particleEffect: 'none',
+    },
+    openingHours: { mon: '09:00-21:00' },
+    zones: 5,
+  },
+  {
+    id: '3',
     slug: 'ferrari-world-abu-dhabi',
     name: 'Ferrari World Abu Dhabi',
     description:
-      'Первый тематический парк Ferrari в мире. Formula Rossa — самые быстрые американские горки на планете.',
-    city: 'Abu Dhabi',
+      "The world's ultimate Ferrari experience. Home to Formula Rossa — the fastest roller coaster on the planet.",
+    city: 'Yas Island',
     country: 'UAE',
+    region: 'Abu Dhabi, UAE',
     ratingAvg: 4.7,
-    reviewCount: 2840,
-    priceFrom: 89,
-    coverImage: 'https://cdn.parkpass.demo/ferrari-cover.jpg',
-    heroVideoUrl: 'https://cdn.parkpass.demo/ferrari-hero.webm',
+    reviewCount: 6840,
+    priceFrom: 95,
+    coverImage:
+      'https://images.unsplash.com/photo-1568605117035-5fe5e7bab0b0?w=1200&q=80',
+    category: 'speed',
+    badge: null,
+    isFeatured: true,
     theme: {
       primaryColor: '#DC0000',
       secondaryColor: '#1A1A1A',
       particleEffect: 'speed',
     },
     openingHours: { mon: '10:00-20:00', tue: '10:00-20:00' },
-  },
-  {
-    id: '2',
-    slug: 'magic-kingdom-eu',
-    name: 'Magic Kingdom EU',
-    description: 'Сказочный мир для всей семьи с парадами и волшебными зонами.',
-    city: 'Paris',
-    country: 'France',
-    ratingAvg: 4.9,
-    reviewCount: 12000,
-    priceFrom: 120,
-    coverImage: 'https://cdn.parkpass.demo/magic-cover.jpg',
-    theme: {
-      primaryColor: '#F472B6',
-      secondaryColor: '#FBBF24',
-      particleEffect: 'stars',
-    },
-    openingHours: { mon: '09:00-22:00' },
+    zones: 4,
   },
 ];
 
-const attractions: Record<string, unknown[]> = {
-  'ferrari-world-abu-dhabi': [
+const attractions: Record<string, object[]> = {
+  'magic-kingdom': [
     {
       id: 'a1',
-      name: 'Formula Rossa',
+      name: 'Space Mountain',
       category: 'Экстрим',
-      avgWaitMin: 45,
-      imageUrl: 'https://cdn.parkpass.demo/formula-rossa.jpg',
+      avgWaitMin: 55,
+      imageUrl:
+        'https://images.unsplash.com/photo-1598306447935-aea87293bd0a?w=600&q=80',
     },
     {
       id: 'a2',
+      name: 'Замок Золушки',
+      category: 'Семейный',
+      avgWaitMin: 25,
+      imageUrl:
+        'https://images.unsplash.com/photo-1536092029617-efc5efebfcfe?w=600&q=80',
+    },
+    {
+      id: 'a3',
+      name: 'Pirates of the Caribbean',
+      category: 'Приключения',
+      avgWaitMin: 40,
+      imageUrl:
+        'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&q=80',
+    },
+  ],
+  'universal-epic-universe': [
+    {
+      id: 'b1',
+      name: 'VelociCoaster',
+      category: 'Экстрим',
+      avgWaitMin: 70,
+      imageUrl:
+        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+    },
+    {
+      id: 'b2',
+      name: 'Hagrid\'s Motorbike',
+      category: 'Семейный',
+      avgWaitMin: 50,
+      imageUrl:
+        'https://images.unsplash.com/photo-1464146072230-91caaa968e7b?w=600&q=80',
+    },
+  ],
+  'ferrari-world-abu-dhabi': [
+    {
+      id: 'c1',
+      name: 'Formula Rossa',
+      category: 'Экстрим',
+      avgWaitMin: 45,
+      imageUrl:
+        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+    },
+    {
+      id: 'c2',
       name: 'Flying Aces',
       category: 'Экстрим',
       avgWaitMin: 30,
-      imageUrl: 'https://cdn.parkpass.demo/flying-aces.jpg',
+      imageUrl:
+        'https://images.unsplash.com/photo-1464146072230-91caaa968e7b?w=600&q=80',
     },
-  ],
-  'magic-kingdom-eu': [
     {
-      id: 'b1',
-      name: 'Замок Мечты',
+      id: 'c3',
+      name: 'Fiorano GT Challenge',
       category: 'Семейный',
       avgWaitMin: 20,
-      imageUrl: 'https://cdn.parkpass.demo/castle.jpg',
+      imageUrl:
+        'https://images.unsplash.com/photo-1568605117035-5fe5e7bab0b0?w=600&q=80',
     },
   ],
 };
 
-/** GET /api/v1/parks — каталог с фильтрацией */
+const ticketTypes: Record<string, object[]> = {
+  'magic-kingdom': [
+    { id: 't1', name: 'Standard', price: 109, features: ['1 день', 'Все зоны', 'QR-билет'] },
+    { id: 't2', name: 'Fast Pass', price: 159, features: ['Приоритетные очереди', '1 день', 'Все зоны'] },
+    { id: 't3', name: 'VIP', price: 249, features: ['VIP-вход', 'Fast Pass', 'Парковка'] },
+  ],
+  'universal-epic-universe': [
+    { id: 't1', name: 'Standard', price: 119, features: ['1 день', 'Все миры'] },
+    { id: 't2', name: 'Express Pass', price: 169, features: ['Express очереди', '1 день'] },
+    { id: 't3', name: 'VIP', price: 279, features: ['VIP тур', 'Express', 'Питание'] },
+  ],
+  'ferrari-world-abu-dhabi': [
+    { id: 't1', name: 'Standard', price: 95, features: ['1 день', 'Все аттракционы'] },
+    { id: 't2', name: 'Fast Pass', price: 135, features: ['Приоритет', '1 день'] },
+    { id: 't3', name: 'VIP', price: 199, features: ['VIP лаунж', 'Fast Pass'] },
+  ],
+};
+
+const categories = [
+  { id: 'magical', name: 'Волшебные миры', count: 12, image: 'https://images.unsplash.com/photo-1513885541842-4b030c4d1746?w=400&q=80' },
+  { id: 'thrills', name: 'Экстрим', count: 18, image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80' },
+  { id: 'water', name: 'Водные приключения', count: 8, image: 'https://images.unsplash.com/photo-1505118380757-91f5fcda2c40?w=400&q=80' },
+  { id: 'family', name: 'Семейный отдых', count: 15, image: 'https://images.unsplash.com/photo-1536092029617-efc5efebfcfe?w=400&q=80' },
+  { id: 'speed', name: 'Скорость и гонки', count: 2, image: 'https://images.unsplash.com/photo-1568605117035-5fe5e7bab0b0?w=400&q=80' },
+];
+
+router.get('/categories/list', (_req, res) => {
+  res.json(categories);
+});
+
 router.get('/', (req: Request, res: Response) => {
-  const { city, minRating, maxPrice } = req.query;
+  const { city, minRating, maxPrice, category } = req.query;
   let result = [...parks];
 
   if (city && typeof city === 'string') {
+    const q = city.toLowerCase();
     result = result.filter(
       (p) =>
-        p.city.toLowerCase().includes(city.toLowerCase()) ||
-        p.country.toLowerCase().includes(city.toLowerCase()),
+        p.city.toLowerCase().includes(q) ||
+        p.country.toLowerCase().includes(q) ||
+        p.region.toLowerCase().includes(q),
     );
   }
-  if (minRating) {
-    result = result.filter((p) => p.ratingAvg >= Number(minRating));
-  }
-  if (maxPrice) {
-    result = result.filter((p) => p.priceFrom <= Number(maxPrice));
+  if (minRating) result = result.filter((p) => p.ratingAvg >= Number(minRating));
+  if (maxPrice) result = result.filter((p) => p.priceFrom <= Number(maxPrice));
+  if (category && typeof category === 'string') {
+    result = result.filter((p) => p.category === category);
   }
 
-  res.json({
-    data: result,
-    meta: { total: result.length, page: 1, perPage: 20 },
-  });
+  res.json({ data: result, meta: { total: result.length, page: 1, perPage: 20 } });
 });
 
-/** GET /api/v1/parks/:slug — детальная страница парка */
-router.get('/:slug', (req: Request, res: Response) => {
+router.get('/:slug/tickets', (req, res) => {
+  res.json(ticketTypes[req.params.slug] ?? []);
+});
+
+router.get('/:slug/attractions', (req, res) => {
+  res.json(attractions[req.params.slug] ?? []);
+});
+
+router.get('/:slug', (req, res) => {
   const park = parks.find((p) => p.slug === req.params.slug);
-  if (!park) {
-    return res.status(404).json({ error: 'Park not found' });
-  }
+  if (!park) return res.status(404).json({ error: 'Park not found' });
   res.json(park);
-});
-
-/** GET /api/v1/parks/:slug/attractions */
-router.get('/:slug/attractions', (req: Request, res: Response) => {
-  const list = attractions[req.params.slug] ?? [];
-  res.json(list);
 });
 
 export default router;
