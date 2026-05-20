@@ -16,7 +16,7 @@ export const parks = [
     reviewCount: 15450,
     priceFrom: 109,
     coverImage:
-      'https://images.unsplash.com/photo-1513885541842-4b030c4d1746?w=1200&q=80',
+      'https://images.unsplash.com/photo-1596422846544-e75c642afc16?w=1400&q=85',
     category: 'magical',
     badge: 'Хит недели',
     isFeatured: true,
@@ -41,7 +41,7 @@ export const parks = [
     reviewCount: 9200,
     priceFrom: 119,
     coverImage:
-      'https://images.unsplash.com/photo-1597466590660-f9a0a6e1c6e8?w=1200&q=80',
+      'https://images.unsplash.com/photo-1464440770831-d2746e84329c?w=1400&q=85',
     category: 'thrills',
     badge: null,
     isFeatured: true,
@@ -66,7 +66,7 @@ export const parks = [
     reviewCount: 6840,
     priceFrom: 95,
     coverImage:
-      'https://images.unsplash.com/photo-1568605117035-5fe5e7bab0b0?w=1200&q=80',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=85',
     category: 'speed',
     badge: null,
     isFeatured: true,
@@ -88,7 +88,7 @@ const attractions: Record<string, object[]> = {
       category: 'Экстрим',
       avgWaitMin: 55,
       imageUrl:
-        'https://images.unsplash.com/photo-1598306447935-aea87293bd0a?w=600&q=80',
+        'https://images.unsplash.com/photo-1598306447935-aea87293bd0a?w=800&q=85',
     },
     {
       id: 'a2',
@@ -96,7 +96,7 @@ const attractions: Record<string, object[]> = {
       category: 'Семейный',
       avgWaitMin: 25,
       imageUrl:
-        'https://images.unsplash.com/photo-1536092029617-efc5efebfcfe?w=600&q=80',
+        'https://images.unsplash.com/photo-1596422846544-e75c642afc16?w=800&q=85',
     },
     {
       id: 'a3',
@@ -104,7 +104,7 @@ const attractions: Record<string, object[]> = {
       category: 'Приключения',
       avgWaitMin: 40,
       imageUrl:
-        'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&q=80',
+        'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=85',
     },
   ],
   'universal-epic-universe': [
@@ -114,7 +114,7 @@ const attractions: Record<string, object[]> = {
       category: 'Экстрим',
       avgWaitMin: 70,
       imageUrl:
-        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+        'https://images.unsplash.com/photo-1508807526345-15e9b5e4f876?w=800&q=85',
     },
     {
       id: 'b2',
@@ -122,7 +122,7 @@ const attractions: Record<string, object[]> = {
       category: 'Семейный',
       avgWaitMin: 50,
       imageUrl:
-        'https://images.unsplash.com/photo-1464146072230-91caaa968e7b?w=600&q=80',
+        'https://images.unsplash.com/photo-1464440770831-d2746e84329c?w=800&q=85',
     },
   ],
   'ferrari-world-abu-dhabi': [
@@ -132,7 +132,7 @@ const attractions: Record<string, object[]> = {
       category: 'Экстрим',
       avgWaitMin: 45,
       imageUrl:
-        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=85',
     },
     {
       id: 'c2',
@@ -140,7 +140,7 @@ const attractions: Record<string, object[]> = {
       category: 'Экстрим',
       avgWaitMin: 30,
       imageUrl:
-        'https://images.unsplash.com/photo-1464146072230-91caaa968e7b?w=600&q=80',
+        'https://images.unsplash.com/photo-1621135802922-27a5f566153a?w=800&q=85',
     },
     {
       id: 'c3',
@@ -148,7 +148,7 @@ const attractions: Record<string, object[]> = {
       category: 'Семейный',
       avgWaitMin: 20,
       imageUrl:
-        'https://images.unsplash.com/photo-1568605117035-5fe5e7bab0b0?w=600&q=80',
+        'https://images.unsplash.com/photo-1544636331-e26879cd4d9a?w=800&q=85',
     },
   ],
 };
@@ -172,11 +172,11 @@ const ticketTypes: Record<string, object[]> = {
 };
 
 const categories = [
-  { id: 'magical', name: 'Волшебные миры', count: 12, image: 'https://images.unsplash.com/photo-1513885541842-4b030c4d1746?w=400&q=80' },
-  { id: 'thrills', name: 'Экстрим', count: 18, image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80' },
-  { id: 'water', name: 'Водные приключения', count: 8, image: 'https://images.unsplash.com/photo-1505118380757-91f5fcda2c40?w=400&q=80' },
-  { id: 'family', name: 'Семейный отдых', count: 15, image: 'https://images.unsplash.com/photo-1536092029617-efc5efebfcfe?w=400&q=80' },
-  { id: 'speed', name: 'Скорость и гонки', count: 2, image: 'https://images.unsplash.com/photo-1568605117035-5fe5e7bab0b0?w=400&q=80' },
+  { id: 'magical', name: 'Волшебные миры', count: 12, image: 'https://images.unsplash.com/photo-1513885541842-4b030c4d1746?w=600&q=85' },
+  { id: 'thrills', name: 'Экстрим', count: 18, image: 'https://images.unsplash.com/photo-1508807526345-15e9b5e4f876?w=600&q=85' },
+  { id: 'water', name: 'Водные приключения', count: 8, image: 'https://images.unsplash.com/photo-1505118380757-91f5fcda2c40?w=600&q=85' },
+  { id: 'family', name: 'Семейный отдых', count: 15, image: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&q=85' },
+  { id: 'speed', name: 'Скорость и гонки', count: 2, image: 'https://images.unsplash.com/photo-1621135802922-27a5f566153a?w=600&q=85' },
 ];
 
 router.get('/categories/list', (_req, res) => {
