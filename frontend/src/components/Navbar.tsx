@@ -13,9 +13,13 @@ const links = [
 export default function Navbar() {
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     setUser(getUser());
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, [pathname]);
 
   const logout = () => {
@@ -25,47 +29,61 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-brand-surface/95 backdrop-blur-md border-b border-brand-border">
-      <nav className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-brand-navy">
-          Park<span className="text-brand-accent">Pass</span>
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-white/95 backdrop-blur-lg shadow-sm border-b border-brand-border'
+          : 'bg-brand-bg/80 backdrop-blur-sm border-b border-transparent'
+      }`}
+    >
+      <nav className="max-w-6xl mx-auto px-4 md:px-6 h-[72px] flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2">
+          <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-accent to-brand-navy flex items-center justify-center text-white font-bold text-sm">
+            P
+          </span>
+          <span className="text-xl font-bold text-brand-navy">
+            Park<span className="text-brand-accent">Pass</span>
+          </span>
         </Link>
 
-        <div className="hidden md:flex gap-8 text-sm font-medium text-brand-muted">
+        <div className="hidden md:flex gap-1 p-1 bg-brand-bg rounded-xl">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className={
-                pathname === l.href || pathname.startsWith(l.href + '/')
-                  ? 'text-brand-accent'
-                  : 'hover:text-brand-text transition'
-              }
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                pathname === l.href || pathname.startsWith(l.href + '?')
+                  ? 'bg-white text-brand-accent shadow-sm'
+                  : 'text-brand-muted hover:text-brand-text'
+              }`}
             >
               {l.label}
             </Link>
           ))}
         </div>
 
-        <div className="flex gap-2 md:gap-3 items-center">
+        <div className="flex gap-2 items-center">
           {user ? (
             <>
               <Link
                 href="/account"
-                className="hidden sm:inline text-sm font-medium text-brand-navy hover:text-brand-accent"
+                className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-brand-bg transition"
               >
-                {user.firstName}
+                <span className="w-8 h-8 rounded-full bg-brand-accent/20 text-brand-accent flex items-center justify-center text-sm font-bold">
+                  {user.firstName[0]}
+                </span>
+                <span className="text-sm font-medium text-brand-navy">{user.firstName}</span>
               </Link>
               <button type="button" onClick={logout} className="text-sm text-brand-muted hover:text-brand-text px-2">
                 Выйти
               </button>
             </>
           ) : (
-            <Link href="/auth" className="hidden sm:inline-flex px-4 py-2 text-sm font-medium text-brand-muted hover:text-brand-text">
+            <Link href="/auth" className="hidden sm:inline text-sm font-medium text-brand-muted hover:text-brand-accent px-3">
               Войти
             </Link>
           )}
-          <Link href="/parks" className="btn-primary text-sm py-2 px-4">
+          <Link href="/parks" className="btn-primary text-sm py-2.5 px-5">
             Найти парки
           </Link>
         </div>

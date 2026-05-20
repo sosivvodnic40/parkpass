@@ -1,18 +1,32 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import SearchBar from '@/components/SearchBar';
 import ParkCard from '@/components/ParkCard';
 import { getParks, getCategories } from '@/lib/api';
+import { images } from '@/lib/images';
 
 const trust = [
-  { title: 'Прозрачная цена', desc: 'Без скрытых сборов' },
-  { title: 'Мгновенное подтверждение', desc: 'Билеты на email сразу' },
-  { title: 'Кэшбэк до 12%', desc: 'На следующий визит' },
+  {
+    icon: '💎',
+    title: 'Прозрачная цена',
+    desc: 'Итоговая сумма сразу — без скрытых сборов',
+  },
+  {
+    icon: '⚡',
+    title: 'Мгновенное подтверждение',
+    desc: 'QR-билет на email за секунды',
+  },
+  {
+    icon: '🎁',
+    title: 'Кэшбэк до 12%',
+    desc: 'Баллы клуба ParkPass на следующий визит',
+  },
 ];
 
 const steps = [
-  { n: '01', title: 'Выберите парк', desc: 'Сравните цены, отзывы и тематические зоны.' },
-  { n: '02', title: 'Забронируйте', desc: 'Оплатите онлайн — билеты придут мгновенно.' },
-  { n: '03', title: 'Наслаждайтесь', desc: 'Предъявите QR-код на входе и начните приключение.' },
+  { n: '01', title: 'Выберите парк', desc: 'Сравните цены, отзывы и зоны' },
+  { n: '02', title: 'Забронируйте', desc: 'Оплата онлайн — билет мгновенно' },
+  { n: '03', title: 'Наслаждайтесь', desc: 'QR-код на входе — и вперёд!' },
 ];
 
 export default async function HomePage() {
@@ -24,55 +38,74 @@ export default async function HomePage() {
 
   return (
     <main>
-      {/* Hero — как figma.site */}
-      <section className="relative min-h-[560px] md:min-h-[600px] flex items-end pb-0">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1597466590660-f9a0a6e1c6e8?w=1920&q=80)',
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-brand-navy/50 to-brand-navy/30" />
+      {/* Hero — split layout с коллажем */}
+      <section className="relative overflow-hidden bg-hero-mesh">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 pt-8 pb-4 md:pt-12">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center min-h-[520px]">
+            <div className="relative z-10 py-8">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-brand-accent/10 text-brand-accent text-sm font-semibold mb-6">
+                Агрегатор №1 для парков мира
+              </span>
+              <h1 className="font-display text-4xl md:text-5xl lg:text-[3.25rem] font-bold text-brand-navy leading-[1.1] tracking-tight">
+                Парк мечты —{' '}
+                <span className="text-brand-accent italic">один клик</span>
+              </h1>
+              <p className="text-brand-muted text-lg mt-5 max-w-md leading-relaxed">
+                Сравните билеты в Magic Kingdom, Universal, Ferrari World и десятки других парков.
+              </p>
+              <div className="mt-8">
+                <SearchBar />
+              </div>
+            </div>
 
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 md:px-6 pt-28 pb-32">
-          <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold text-white leading-tight max-w-2xl">
-            Парк мечты — один клик
-          </h1>
-          <p className="text-stone-200 text-lg md:text-xl mt-4 max-w-xl">
-            Сравните билеты и забронируйте без скрытых сборов
-          </p>
-          <div className="mt-10 max-w-4xl -mb-16 relative z-20">
-            <SearchBar />
+            <div className="relative h-[400px] lg:h-[480px] hidden md:block">
+              <div className="absolute top-0 right-0 w-[72%] h-[85%] rounded-3xl overflow-hidden shadow-float">
+                <Image
+                  src={images.hero.main}
+                  alt="Тематический парк"
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="50vw"
+                />
+              </div>
+              <div className="absolute bottom-8 left-0 w-[48%] h-[42%] rounded-2xl overflow-hidden shadow-card border-4 border-white">
+                <Image src={images.hero.side1} alt="Аттракцион" fill className="object-cover" sizes="25vw" />
+              </div>
+              <div className="absolute top-16 left-[8%] w-[40%] h-[38%] rounded-2xl overflow-hidden shadow-card border-4 border-white">
+                <Image src={images.hero.side2} alt="Замок" fill className="object-cover" sizes="20vw" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Trust */}
-      <section className="bg-brand-bg pt-24 pb-12">
-        <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-6">
+      <section className="border-y border-brand-border bg-white">
+        <div className="max-w-6xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-8">
           {trust.map((t) => (
-            <div key={t.title} className="flex gap-4 items-start">
-              <div className="w-10 h-10 rounded-full bg-brand-accent/10 flex items-center justify-center text-brand-accent font-bold shrink-0">
-                ✓
-              </div>
+            <div
+              key={t.title}
+              className="flex gap-4 p-4 rounded-2xl hover:bg-brand-bg transition-colors"
+            >
+              <span className="text-3xl">{t.icon}</span>
               <div>
-                <p className="font-semibold text-brand-navy">{t.title}</p>
-                <p className="text-sm text-brand-muted">{t.desc}</p>
+                <p className="font-bold text-brand-navy">{t.title}</p>
+                <p className="text-sm text-brand-muted mt-1">{t.desc}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Featured — асимметричная сетка */}
-      <section className="py-16 bg-white">
+      {/* Featured */}
+      <section className="py-20">
         <div className="max-w-6xl mx-auto px-6">
-          <p className="text-brand-accent font-semibold text-sm mb-1">Популярные направления</p>
-          <h2 className="text-3xl font-bold text-brand-navy mb-8">Лучшие парки недели</h2>
+          <p className="section-label">Популярные направления</p>
+          <h2 className="section-title mt-2 mb-10">Лучшие парки недели</h2>
 
           {parks.length === 0 ? (
-            <p className="text-brand-muted">Запустите backend: cd backend && npm run dev</p>
+            <p className="text-brand-muted p-8 card">Запустите backend: cd backend && npm run dev</p>
           ) : (
             <div className="grid md:grid-cols-2 gap-6">
               {main && (
@@ -91,27 +124,34 @@ export default async function HomePage() {
       </section>
 
       {/* Categories */}
-      <section className="py-16 bg-brand-bg">
-        <div className="max-w-6xl mx-auto px-6">
-          <p className="text-brand-muted text-sm font-medium mb-1">Тип парка</p>
-          <h2 className="text-3xl font-bold text-brand-navy mb-8">Найдите свой формат</h2>
+      <section className="py-20 bg-brand-navy text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <Image src={images.cta} alt="" fill className="object-cover" />
+        </div>
+        <div className="absolute inset-0 bg-brand-navy/90" />
+        <div className="relative max-w-6xl mx-auto px-6">
+          <p className="text-teal-300 font-semibold text-sm uppercase tracking-wide">Тип парка</p>
+          <h2 className="font-display text-3xl md:text-4xl font-bold mt-2 mb-10">
+            Найдите свой формат
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {categories.map((c) => (
               <Link
                 key={c.id}
                 href={`/parks?category=${c.id}`}
-                className="card group hover:shadow-card-hover transition-shadow"
+                className="group relative h-44 rounded-2xl overflow-hidden border border-white/10 hover:border-teal-400/50 transition-all"
               >
-                <div className="h-28 overflow-hidden">
-                  <img
-                    src={c.image}
-                    alt={c.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-4">
-                  <p className="font-semibold text-sm text-brand-navy">{c.name}</p>
-                  <p className="text-xs text-brand-muted mt-1">{c.count} парков →</p>
+                <Image
+                  src={c.image}
+                  alt={c.name}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="200px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                <div className="absolute bottom-0 p-4">
+                  <p className="font-bold text-sm">{c.name}</p>
+                  <p className="text-teal-200/80 text-xs mt-1">{c.count} парков →</p>
                 </div>
               </Link>
             ))}
@@ -120,18 +160,21 @@ export default async function HomePage() {
       </section>
 
       {/* Steps */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-6">
-          <p className="text-brand-muted text-sm font-medium mb-1">Просто и быстро</p>
-          <h2 className="text-3xl font-bold text-brand-navy mb-12 text-center">
-            Три шага до незабываемого дня
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <p className="section-label">Просто и быстро</p>
+          <h2 className="section-title mt-2 mb-14">Три шага до незабываемого дня</h2>
+          <div className="grid md:grid-cols-3 gap-8 text-left">
             {steps.map((s) => (
-              <div key={s.n} className="text-center p-8 rounded-2xl bg-brand-bg border border-brand-border">
-                <span className="text-4xl font-bold text-brand-accent/30">{s.n}</span>
-                <h3 className="text-xl font-bold text-brand-navy mt-4 mb-2">{s.title}</h3>
-                <p className="text-brand-muted text-sm">{s.desc}</p>
+              <div
+                key={s.n}
+                className="relative p-8 rounded-3xl bg-brand-bg border border-brand-border overflow-hidden group hover:shadow-card-hover transition-shadow"
+              >
+                <span className="absolute -top-4 -right-2 font-display text-[7rem] font-bold text-brand-accent/10 leading-none select-none">
+                  {s.n}
+                </span>
+                <h3 className="text-xl font-bold text-brand-navy relative">{s.title}</h3>
+                <p className="text-brand-muted text-sm mt-3 relative">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -139,13 +182,15 @@ export default async function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-brand-navy text-white">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ваш следующий парк ждёт</h2>
-          <p className="text-stone-400 mb-8">
-            Более 50 парков, честные цены, мгновенные билеты.
+      <section className="relative py-24 overflow-hidden">
+        <Image src={images.cta} alt="" fill className="object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 to-brand-accent/80" />
+        <div className="relative max-w-3xl mx-auto px-6 text-center text-white">
+          <h2 className="font-display text-3xl md:text-5xl font-bold">Ваш следующий парк ждёт</h2>
+          <p className="text-white/80 text-lg mt-4 mb-10">
+            Честные цены · мгновенные билеты · кэшбэк клуба
           </p>
-          <Link href="/parks" className="btn-primary text-lg px-10">
+          <Link href="/parks" className="btn-coral text-lg px-12 py-4 shadow-float">
             Смотреть все парки
           </Link>
         </div>

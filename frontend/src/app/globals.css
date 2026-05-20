@@ -12,15 +12,33 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-[10px] font-semibold text-white bg-brand-accent hover:bg-brand-accent-hover transition-colors;
+    @apply inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold text-white
+      bg-gradient-to-r from-brand-accent to-brand-navy shadow-md
+      hover:shadow-lg hover:brightness-105 transition-all duration-200;
+  }
+  .btn-coral {
+    @apply inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold text-white
+      bg-brand-coral hover:bg-orange-600 shadow-md transition-all duration-200;
   }
   .btn-outline {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-[10px] font-semibold border-2 border-brand-border text-brand-text hover:border-brand-accent hover:text-brand-accent transition-colors;
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold
+      border-2 border-brand-border text-brand-text bg-white
+      hover:border-brand-accent hover:text-brand-accent transition-colors;
   }
   .card {
-    @apply bg-brand-surface rounded-2xl shadow-card border border-brand-border/60 overflow-hidden;
+    @apply bg-brand-surface rounded-2xl shadow-card border border-brand-border/80 overflow-hidden;
   }
   .input-field {
-    @apply w-full px-4 py-3 rounded-[10px] border border-brand-border bg-white text-brand-text placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent;
+    @apply w-full px-4 py-3 rounded-xl border border-brand-border bg-white text-brand-text
+      placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-brand-accent/25 focus:border-brand-accent;
+  }
+  .section-label {
+    @apply text-brand-accent font-semibold text-sm tracking-wide uppercase;
+  }
+  .section-title {
+    @apply font-display text-3xl md:text-4xl font-bold text-brand-navy tracking-tight;
+  }
+  .image-overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent;
   }
 }
