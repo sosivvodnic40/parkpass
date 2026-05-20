@@ -98,6 +98,62 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Disney hub */}
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+            <div>
+              <p className="section-label">✨ Disney</p>
+              <h2 className="section-title mt-2">Парки Disneyland по всему миру</h2>
+            </div>
+            <Link href="/parks/disney" className="btn-outline shrink-0">
+              Все парки Disney →
+            </Link>
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              { name: 'Disneyland Paris', img: images.disney.paris, href: '/parks/disneyland-paris', price: 99 },
+              { name: 'Disneyland California', img: images.disney.california, href: '/parks/disneyland-california', price: 124 },
+              { name: 'Walt Disney World', img: images.disney.orlando, href: '/parks/walt-disney-world', price: 129 },
+            ].map((d) => (
+              <Link
+                key={d.href}
+                href={d.href}
+                className="group relative h-56 rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition"
+              >
+                <Image src={d.img} alt={d.name} fill className="object-cover group-hover:scale-105 transition duration-500" sizes="400px" />
+                <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/90 to-transparent" />
+                <div className="absolute bottom-0 p-5 text-white">
+                  <p className="font-bold text-lg">{d.name}</p>
+                  <p className="text-sm text-white/70 mt-1">от {d.price} € / чел.</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Star Wars promo */}
+      <section className="py-16 px-6">
+        <div className="max-w-6xl mx-auto relative rounded-3xl overflow-hidden min-h-[280px] flex items-center">
+          <Image src={images.starWars.hero} alt="Star Wars" fill className="object-cover" sizes="1200px" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a12] via-[#0a0a12]/80 to-transparent" />
+          <div className="relative z-10 p-8 md:p-12 max-w-xl text-white">
+            <p className="text-[#FFE81F] font-bold tracking-[0.2em] uppercase text-xs mb-3">Отдельный мир</p>
+            <h2 className="font-display text-3xl md:text-4xl font-bold">Star Wars: Galaxy&apos;s Edge</h2>
+            <p className="text-stone-400 mt-3 text-sm leading-relaxed">
+              Батуу, Millennium Falcon, Rise of the Resistance — космическая страница с уникальным дизайном.
+            </p>
+            <Link
+              href="/worlds/star-wars"
+              className="inline-block mt-6 px-8 py-3 rounded-xl bg-[#FFE81F] text-[#0a0a12] font-bold hover:bg-[#fff176] transition"
+            >
+              Войти на Батуу →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Featured */}
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6">

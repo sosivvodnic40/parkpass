@@ -13,6 +13,7 @@ export interface Park {
   priceFrom: number;
   coverImage: string;
   category: string;
+  brand?: string | null;
   badge: string | null;
   isFeatured: boolean;
   zones: number;
@@ -45,10 +46,12 @@ export interface Category {
 export async function getParks(params?: {
   category?: string;
   city?: string;
+  brand?: string;
 }): Promise<Park[]> {
   const q = new URLSearchParams();
   if (params?.category) q.set('category', params.category);
   if (params?.city) q.set('city', params.city);
+  if (params?.brand) q.set('brand', params.brand);
   const res = await fetch(`${API}/api/v1/parks?${q}`, { cache: 'no-store' });
   const json = await res.json();
   return json.data ?? [];

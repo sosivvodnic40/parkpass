@@ -20,9 +20,10 @@ export default function Footer() {
         <div>
           <p className="font-semibold mb-4 text-teal-200 text-sm">Парки</p>
           <ul className="space-y-2.5 text-sm text-stone-400">
-            <li><Link href="/parks/magic-kingdom" className="hover:text-white transition">Magic Kingdom</Link></li>
-            <li><Link href="/parks/universal-epic-universe" className="hover:text-white transition">Universal Epic</Link></li>
-            <li><Link href="/parks/ferrari-world-abu-dhabi" className="hover:text-white transition">Ferrari World</Link></li>
+            <li><Link href="/parks/disney" className="hover:text-white transition">Все парки Disney</Link></li>
+            <li><Link href="/worlds/star-wars" className="hover:text-[#FFE81F] transition">Star Wars: Batuu</Link></li>
+            <li><Link href="/parks/disneyland-paris" className="hover:text-white transition">Disneyland Paris</Link></li>
+            <li><Link href="/parks/disneyland-california" className="hover:text-white transition">Disneyland California</Link></li>
           </ul>
         </div>
         <div>

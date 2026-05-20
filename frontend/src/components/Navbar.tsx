@@ -7,6 +7,8 @@ import { clearSession, getUser, type User } from '@/lib/auth';
 
 const links = [
   { href: '/parks', label: 'Парки' },
+  { href: '/parks/disney', label: 'Disney' },
+  { href: '/worlds/star-wars', label: 'Star Wars' },
   { href: '/favorites', label: 'Избранное' },
 ];
 
@@ -52,7 +54,10 @@ export default function Navbar() {
               key={l.href}
               href={l.href}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                pathname === l.href || pathname.startsWith(l.href + '?')
+                pathname === l.href ||
+                pathname.startsWith(l.href + '?') ||
+                (l.href === '/parks/disney' && pathname.startsWith('/parks/') && pathname.includes('disney')) ||
+                (l.href === '/worlds/star-wars' && pathname.startsWith('/worlds/star-wars'))
                   ? 'bg-white text-brand-accent shadow-sm'
                   : 'text-brand-muted hover:text-brand-text'
               }`}

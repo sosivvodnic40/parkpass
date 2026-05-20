@@ -4,6 +4,8 @@ import SearchBar from '@/components/SearchBar';
 import { getParks, getCategories } from '@/lib/api';
 
 const categoryLabels: Record<string, string> = {
+  disney: 'Disneyland & Disney',
+  'star-wars': 'Star Wars',
   magical: 'Волшебные миры',
   thrills: 'Экстрим',
   water: 'Водные приключения',

@@ -13,13 +13,16 @@ export default async function ParkDetailPage({
   const park = await getPark(params.slug);
   if (!park) notFound();
 
+  const isStarWars = park.category === 'star-wars';
+  const isDisney = park.brand === 'disney' || park.category === 'disney';
+
   const [attractions, tickets] = await Promise.all([
     getAttractions(params.slug),
     getTickets(params.slug),
   ]);
 
   return (
-    <main className="pb-20 bg-brand-bg">
+    <main className={`pb-20 ${isStarWars ? 'bg-[#0a0a12] text-white' : 'bg-brand-bg'}`}>
       <section className="relative h-[440px] md:h-[520px]">
         <Image
           src={park.coverImage}
@@ -29,17 +32,48 @@ export default async function ParkDetailPage({
           priority
           sizes="100vw"
         />
-        <div className="image-overlay" />
+        <div
+          className={`absolute inset-0 ${
+            isStarWars
+              ? 'bg-gradient-to-t from-[#0a0a12] via-[#0a0a12]/50 to-transparent'
+              : 'image-overlay'
+          }`}
+        />
+        {isStarWars && (
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,232,31,0.12)_0%,transparent_50%)]" />
+        )}
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12 max-w-6xl mx-auto">
           {park.badge && (
-            <span className="inline-block bg-brand-coral text-white text-xs font-bold px-4 py-1.5 rounded-full mb-4 shadow-lg">
+            <span
+              className={`inline-block text-xs font-bold px-4 py-1.5 rounded-full mb-4 shadow-lg ${
+                isStarWars
+                  ? 'bg-[#FFE81F] text-[#0a0a12]'
+                  : isDisney
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-brand-coral text-white'
+              }`}
+            >
               {park.badge}
             </span>
           )}
-          <h1 className="font-display text-4xl md:text-6xl font-bold text-white">{park.name}</h1>
+          {isStarWars && (
+            <Link
+              href="/worlds/star-wars"
+              className="inline-block text-[#FFE81F] text-sm font-semibold mb-3 hover:underline"
+            >
+              ← Полная страница Galaxy&apos;s Edge
+            </Link>
+          )}
+          <h1
+            className={`font-display text-4xl md:text-6xl font-bold text-white ${
+              isStarWars ? 'text-[#FFE81F]' : ''
+            }`}
+          >
+            {park.name}
+          </h1>
           <p className="text-white/80 text-lg mt-2">{park.region}</p>
           <div className="flex flex-wrap items-center gap-4 mt-4">
-            <p className="text-amber-300 font-semibold text-lg">
+            <p className={`font-semibold text-lg ${isStarWars ? 'text-amber-300' : 'text-amber-300'}`}>
               ★ {park.ratingAvg} · {park.reviewCount.toLocaleString('ru-RU')} отзывов · {park.zones} зон
             </p>
             <FavoriteButton slug={park.slug} variant="hero" />
@@ -50,45 +84,65 @@ export default async function ParkDetailPage({
       <BookingBar
         slug={park.slug}
         priceFrom={park.priceFrom}
-        accentColor={park.theme.primaryColor}
+        accentColor={isStarWars ? '#FFE81F' : park.theme.primaryColor}
       />
 
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-14 space-y-20">
-        <section className="card p-8 md:p-10">
-          <h2 className="section-title text-2xl mb-4">О парке</h2>
-          <p className="text-brand-muted leading-relaxed text-lg max-w-3xl">{park.description}</p>
+        <section className={`p-8 md:p-10 rounded-2xl ${isStarWars ? 'bg-white/5 border border-white/10' : 'card'}`}>
+          <h2 className={`text-2xl font-bold mb-4 ${isStarWars ? 'text-[#FFE81F]' : 'section-title'}`}>
+            О парке
+          </h2>
+          <p className={`leading-relaxed text-lg max-w-3xl ${isStarWars ? 'text-stone-400' : 'text-brand-muted'}`}>
+            {park.description}
+          </p>
         </section>
 
         <section>
-          <h2 className="section-title mb-8">Билеты и тарифы</h2>
+          <h2 className={`mb-8 ${isStarWars ? 'font-display text-3xl text-[#FFE81F]' : 'section-title'}`}>
+            Билеты и тарифы
+          </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {tickets.map((t, i) => (
               <div
                 key={t.id}
-                className={`card p-8 flex flex-col relative ${
-                  i === 1 ? 'ring-2 ring-brand-accent shadow-card-hover md:scale-[1.02]' : ''
+                className={`p-8 flex flex-col relative rounded-2xl ${
+                  isStarWars
+                    ? i === 1
+                      ? 'border border-[#FFE81F] bg-[#FFE81F]/5'
+                      : 'border border-white/10 bg-white/5'
+                    : `card ${i === 1 ? 'ring-2 ring-brand-accent shadow-card-hover md:scale-[1.02]' : ''}`
                 }`}
               >
                 {i === 1 && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-brand-accent to-brand-navy text-white text-xs font-bold px-4 py-1.5 rounded-full">
+                  <span
+                    className={`absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-bold px-4 py-1.5 rounded-full ${
+                      isStarWars ? 'bg-[#FFE81F] text-[#0a0a12]' : 'bg-gradient-to-r from-brand-accent to-brand-navy text-white'
+                    }`}
+                  >
                     Популярный
                   </span>
                 )}
-                <h3 className="text-xl font-bold text-brand-navy">{t.name}</h3>
-                <p className="text-4xl font-bold tabular-nums mt-5 text-brand-navy">
-                  {t.price} <span className="text-lg font-medium text-brand-muted">€</span>
+                <h3 className={`text-xl font-bold ${isStarWars ? 'text-white' : 'text-brand-navy'}`}>{t.name}</h3>
+                <p className={`text-4xl font-bold tabular-nums mt-5 ${isStarWars ? 'text-[#FFE81F]' : 'text-brand-navy'}`}>
+                  {t.price} <span className={`text-lg font-medium ${isStarWars ? 'text-stone-500' : 'text-brand-muted'}`}>€</span>
                 </p>
                 <ul className="mt-8 space-y-3 flex-1">
                   {t.features.map((f) => (
-                    <li key={f} className="text-sm text-brand-muted flex gap-2">
-                      <span className="text-brand-accent font-bold">✓</span> {f}
+                    <li key={f} className={`text-sm flex gap-2 ${isStarWars ? 'text-stone-400' : 'text-brand-muted'}`}>
+                      <span className={isStarWars ? 'text-[#FFE81F]' : 'text-brand-accent'}>✓</span> {f}
                     </li>
                   ))}
                 </ul>
                 <Link
                   href={`/checkout?park=${park.slug}&ticket=${t.id}`}
                   className={`mt-8 text-center py-3.5 rounded-xl font-semibold ${
-                    i === 1 ? 'btn-primary' : 'btn-outline'
+                    i === 1
+                      ? isStarWars
+                        ? 'bg-[#FFE81F] text-[#0a0a12] hover:bg-[#fff176]'
+                        : 'btn-primary'
+                      : isStarWars
+                        ? 'border border-white/20 hover:border-[#FFE81F]'
+                        : 'btn-outline'
                   }`}
                 >
                   Выбрать
@@ -99,10 +153,17 @@ export default async function ParkDetailPage({
         </section>
 
         <section>
-          <h2 className="section-title mb-8">Аттракционы</h2>
+          <h2 className={`mb-8 ${isStarWars ? 'font-display text-2xl' : 'section-title'}`}>Аттракционы</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {attractions.map((a) => (
-              <article key={a.id} className="card group hover:shadow-card-hover transition-all">
+              <article
+                key={a.id}
+                className={`group transition-all rounded-2xl overflow-hidden ${
+                  isStarWars
+                    ? 'bg-white/5 border border-white/10 hover:border-[#FFE81F]/30'
+                    : 'card hover:shadow-card-hover'
+                }`}
+              >
                 <div className="relative h-48 overflow-hidden">
                   <Image
                     src={a.imageUrl}
@@ -116,30 +177,14 @@ export default async function ParkDetailPage({
                   </span>
                 </div>
                 <div className="p-5">
-                  <span className="text-xs font-bold text-brand-accent uppercase tracking-wide">
+                  <span className={`text-xs font-bold uppercase tracking-wide ${isStarWars ? 'text-[#FFE81F]' : 'text-brand-accent'}`}>
                     {a.category}
                   </span>
-                  <h3 className="font-bold text-brand-navy text-lg mt-1">{a.name}</h3>
+                  <h3 className={`font-bold text-lg mt-1 ${isStarWars ? 'text-white' : 'text-brand-navy'}`}>{a.name}</h3>
                 </div>
               </article>
             ))}
           </div>
-        </section>
-
-        <section className="card p-8 md:p-10 bg-gradient-to-br from-brand-bg to-white">
-          <h2 className="section-title text-2xl mb-6">Отзывы гостей</h2>
-          <div className="flex flex-wrap items-center gap-8">
-            <span className="text-6xl font-display font-bold text-brand-navy">{park.ratingAvg}</span>
-            <div>
-              <p className="text-amber-500 text-2xl tracking-widest">★★★★★</p>
-              <p className="text-brand-muted mt-1">
-                {park.reviewCount.toLocaleString('ru-RU')} отзывов
-              </p>
-            </div>
-          </div>
-          <blockquote className="mt-8 pl-4 border-l-4 border-brand-accent text-brand-muted italic text-lg">
-            «Незабываемый день для всей семьи! Бронирование через ParkPass заняло 2 минуты.»
-          </blockquote>
         </section>
       </div>
     </main>

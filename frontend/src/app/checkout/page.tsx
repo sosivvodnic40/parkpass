@@ -8,12 +8,24 @@ const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 
 const parkNames: Record<string, string> = {
   'magic-kingdom': 'Magic Kingdom',
+  'disneyland-california': 'Disneyland California',
+  'disneyland-paris': 'Disneyland Paris',
+  'walt-disney-world': 'Walt Disney World',
+  'tokyo-disneyland': 'Tokyo Disney Resort',
+  'hong-kong-disneyland': 'Hong Kong Disneyland',
+  'star-wars-galaxys-edge': "Star Wars: Galaxy's Edge",
   'universal-epic-universe': 'Universal Epic Universe',
   'ferrari-world-abu-dhabi': 'Ferrari World Abu Dhabi',
 };
 
 const parkPrices: Record<string, number> = {
   'magic-kingdom': 109,
+  'disneyland-california': 124,
+  'disneyland-paris': 99,
+  'walt-disney-world': 129,
+  'tokyo-disneyland': 74,
+  'hong-kong-disneyland': 69,
+  'star-wars-galaxys-edge': 139,
   'universal-epic-universe': 119,
   'ferrari-world-abu-dhabi': 95,
 };
