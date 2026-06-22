@@ -1,82 +1,80 @@
-# ParkPass — техническая архитектура
+# ParkPass — техническая архитектура (Backend)
 
 ## Обзор
 
-Монорепозиторий с разделением на `frontend` (Next.js) и `backend` (NestJS). Коммуникация через REST API v1, авторизация JWT (access + refresh).
+Монорепозиторий: `frontend` (Next.js 14) + `backend` (Express + TypeScript).  
+Коммуникация через REST API v1, авторизация JWT (Bearer token).
 
-## Frontend (Next.js 14)
-
-```
-frontend/
-├── src/
-│   ├── app/                 # App Router
-│   │   ├── page.tsx         # Главная
-│   │   ├── parks/
-│   │   ├── checkout/
-│   │   ├── account/
-│   │   └── admin/
-│   ├── components/
-│   ├── hooks/
-│   ├── lib/api.ts
-│   └── styles/
-└── package.json
-```
-
-**Ключевые библиотеки:** React 18, TypeScript, Tailwind CSS, Framer Motion, React Query, Zustand, Mapbox GL.
-
-## Backend (NestJS)
+## Backend (Express 4 + TypeScript)
 
 ```
-backend/
-├── src/
-│   ├── auth/          # JWT, guards
-│   ├── users/
-│   ├── parks/
-│   ├── attractions/
-│   ├── bookings/
-│   ├── reviews/
-│   ├── favorites/
-│   └── admin/
-├── prisma/
-│   └── schema.prisma
-└── package.json
+backend/src/
+├── main.ts              # Запуск сервера
+├── app.ts               # createApp() — для тестов и prod
+├── routes/
+│   ├── auth.ts          # register, login, me
+│   ├── parks.ts         # каталог, schedule, availability
+│   ├── bookings.ts      # бронирования
+│   ├── favorites.ts     # избранное
+│   ├── reviews.ts       # отзывы
+│   └── admin.ts         # статистика, отчёты, роли
+├── services/            # бизнес-логика
+│   ├── auth.service.ts
+│   ├── park.service.ts
+│   ├── booking.service.ts
+│   ├── favorite.service.ts
+│   ├── review.service.ts
+│   ├── schedule.service.ts
+│   └── admin.service.ts
+├── middleware/auth.ts   # JWT, requireRole
+├── data/catalog.ts      # 4 парка, seed-данные
+├── db/pool.ts, seed.ts  # PostgreSQL
+└── __tests__/api.test.ts
 ```
 
-## REST API (основные эндпоинты)
+## Роли пользователей
 
-| Method | Endpoint | Описание |
-|--------|----------|----------|
-| POST | `/api/v1/auth/register` | Регистрация |
-| POST | `/api/v1/auth/login` | Вход → JWT |
-| GET | `/api/v1/parks` | Каталог (query: city, minPrice, rating) |
-| GET | `/api/v1/parks/:slug` | Детали парка |
-| GET | `/api/v1/parks/:slug/attractions` | Аттракционы |
-| POST | `/api/v1/bookings` | Создать бронь |
-| GET | `/api/v1/bookings/me` | Мои брони |
-| POST | `/api/v1/favorites` | Добавить в избранное |
-| GET | `/api/v1/reviews?parkId=` | Отзывы |
-| POST | `/api/v1/reviews` | Создать отзыв |
+| Роль | ENUM в БД | Права |
+|------|-----------|-------|
+| user | user | Брони, избранное, отзывы |
+| park_manager | park_manager | Статистика, брони, отчёты |
+| admin | admin | + управление пользователями |
+
+## REST API
+
+Полная спецификация: [API.md](API.md)
+
+## База данных (PostgreSQL 16)
+
+Таблицы: `users`, `parks`, `attractions`, `ticket_types`, `bookings`, `reviews`, `favorites`.
+
+Схема: `database/schema.sql`  
+Контейнер: `docker-compose.yml`
+
+## Режимы работы
+
+1. **PostgreSQL** — `DATABASE_URL` в `.env`, данные персистентны
+2. **Mock** — без БД, in-memory для разработки frontend и автотестов
 
 ## Безопасность
 
-- bcrypt для паролей (cost 12)
-- JWT access (15m) + refresh (7d) в httpOnly cookie
-- Rate limiting (100 req/min)
-- Валидация DTO (class-validator)
-- CORS только для домена фронтенда
+- bcrypt (cost 10) для паролей
+- JWT 7 дней, секрет через `JWT_SECRET`
+- RBAC middleware `requireRole()`
+- CORS ограничен `FRONTEND_URL`
+
+## Тестирование и CI
+
+```powershell
+cd backend && npm test
+```
+
+GitHub Actions: `.github/workflows/backend-ci.yml`
 
 ## Деплой (рекомендация)
 
 | Слой | Сервис |
 |------|--------|
-| Frontend | Vercel |
 | Backend | Railway / Render |
-| БД | Supabase PostgreSQL |
-| Медиа | Cloudinary |
-| CI/CD | GitHub Actions |
-
-## Масштабирование
-
-- Кэш Redis для каталога парков
-- CDN для статики и видео Hero
-- Read replicas PostgreSQL при росте нагрузки
+| БД | Supabase PostgreSQL / Docker |
+| Frontend | Vercel |
