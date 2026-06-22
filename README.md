@@ -1,63 +1,88 @@
 # ParkPass — агрегатор бронирования тематических парков
 
-**ParkPass** — веб-платформа для поиска, сравнения и бронирования билетов в тематические парки.
+**Дипломный проект** · Шарипов Шамиль · ИС-23-19б · ASTANA POLYTECHNIC · 2026
 
-> Дипломный проект · Дархан, Шамиль  
-> Репозиторий: [github.com/sosivvodnic40/parkpass](https://github.com/sosivvodnic40/parkpass)
-
-## Страницы приложения
-
-| URL | Описание |
-|-----|----------|
-| `/` | Главная — поиск, featured-парки, категории |
-| `/parks` | Каталог с фильтрами |
-| `/parks/[slug]` | Страница парка — билеты, аттракционы |
-| `/checkout` | Оформление бронирования |
-| `/auth` | Вход / регистрация |
-| `/account` | Личный кабинет |
-| `/favorites` | Избранное |
-| `/admin` | Админ-панель (демо) |
+Веб-платформа для поиска, сравнения и бронирования билетов в тематические парки: Star Wars, Harry Potter, Marvel и Jurassic World.
 
 ## Быстрый старт
 
-```bash
-# Backend (порт 4000)
+### 1. PostgreSQL (рекомендуется для защиты)
+
+```powershell
+docker compose up -d
+copy backend\.env.example backend\.env
 cd backend
 npm install
+npm run db:seed
 npm run dev
+```
 
-# Frontend (порт 3000)
+### 2. Frontend
+
+```powershell
 cd frontend
+copy .env.example .env.local
 npm install
 npm run dev
 ```
 
-Откройте http://localhost:3000
+Откройте http://localhost:3000 (API по умолчанию: http://127.0.0.1:4000)
 
-**Демо-вход:** `demo@parkpass.ru` / `demo123`
+**Демо-вход:** `demo@parkpass.ru` / `demo123`  
+**Админ:** `admin@parkpass.ru` / `admin123`  
+**Менеджер:** `manager@parkpass.ru` / `manager123`
+
+### Без Docker
+
+Backend работает в mock-режиме (данные в памяти). Просто:
+
+```powershell
+cd backend && npm install && npm run dev
+cd frontend && npm install && npm run dev
+```
 
 ## Стек
 
-- **Frontend:** Next.js 14, React, TypeScript, Tailwind CSS
-- **Backend:** Node.js, Express, JWT
-- **БД:** PostgreSQL (схема в `database/schema.sql`, demo — mock API)
-
-## Документация
-
-- [docs/CONCEPT.md](docs/CONCEPT.md) — концепция продукта
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — архитектура API
-- [docs/DIPLOMA_BRIEF.md](docs/DIPLOMA_BRIEF.md) — тезисы для защиты
+| Слой | Технологии |
+|------|------------|
+| Frontend | Next.js 14, React, TypeScript, Tailwind CSS |
+| Backend | Node.js, Express, JWT, bcrypt |
+| БД | PostgreSQL 16 (схема `database/schema.sql`) |
 
 ## API
 
+Полная спецификация: [docs/API.md](docs/API.md)
+
 ```
+GET  /health
 GET  /api/v1/parks
-GET  /api/v1/parks/:slug
-GET  /api/v1/parks/:slug/attractions
-GET  /api/v1/parks/:slug/tickets
+GET  /api/v1/parks/:slug/schedule
+GET  /api/v1/parks/:slug/availability
+GET  /api/v1/reviews?parkSlug=
 POST /api/v1/auth/login
-POST /api/v1/auth/register
-POST /api/v1/bookings
+GET  /api/v1/bookings/me      ← JWT
+POST /api/v1/bookings         ← JWT
+GET  /api/v1/favorites        ← JWT
+GET  /api/v1/admin/stats      ← admin / park_manager
 ```
 
-© 2026 ParkPass Team
+Тесты: `cd backend && npm test`  
+Документация: [docs/ADMIN.md](docs/ADMIN.md) · [docs/TESTING.md](docs/TESTING.md)
+
+## Структура для диплома
+
+```
+database/schema.sql     — схема БД (приложение 05_DB_API)
+docs/API.md             — спецификация REST API
+backend/src/services/   — бизнес-логика
+frontend/src/app/       — страницы UI
+docker-compose.yml      — PostgreSQL для демо
+```
+
+## Документация
+
+- [docs/CONCEPT.md](docs/CONCEPT.md)
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- [docs/API.md](docs/API.md)
+
+© 2026 ParkPass · Дипломный проект
