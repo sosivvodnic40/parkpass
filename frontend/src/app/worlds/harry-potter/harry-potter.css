@@ -1,0 +1,72 @@
+/* Figma Make — Harry Potter / Hogwarts */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+
+body.hp-theme {
+  background-color: #0b0d14;
+}
+
+.hp-page {
+  --hp-gold: #c9922a;
+  --hp-gold-light: #e8b84b;
+  --hp-bg: #0b0d14;
+  --hp-surface: #13172a;
+  --hp-surface-deep: #0f1220;
+  --hp-text: #f0e8d8;
+  --hp-font-display: 'Cinzel', Georgia, serif;
+  --hp-font-body: 'Inter', system-ui, sans-serif;
+  background: var(--hp-bg);
+  color: var(--hp-text);
+  font-family: var(--hp-font-body);
+}
+
+.hp-display {
+  font-family: var(--hp-font-display);
+}
+
+.hp-btn-gold {
+  background: linear-gradient(135deg, var(--hp-gold-light), var(--hp-gold));
+  color: #1a0e00;
+  font-family: var(--hp-font-body);
+  font-weight: 600;
+}
+
+.hp-btn-gold:hover {
+  opacity: 0.9;
+}
+
+.hp-divider-sparkle {
+  height: 1px;
+  flex: 1;
+}
+
+.hp-divider-sparkle--left {
+  background: linear-gradient(to right, transparent, rgba(201, 146, 42, 0.25));
+}
+
+.hp-divider-sparkle--right {
+  background: linear-gradient(to left, transparent, rgba(201, 146, 42, 0.25));
+}
+
+.hp-particle {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  animation: hp-float 5s ease-in-out infinite;
+}
+
+@keyframes hp-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-14px) scale(1.2);
+  }
+}
+
+.hp-tickets-bg {
+  background:
+    radial-gradient(ellipse at 30% 0%, rgba(50, 20, 80, 0.5) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 100%, rgba(20, 50, 30, 0.4) 0%, transparent 55%),
+    #0f1220;
+}
