@@ -10,6 +10,8 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
 
   const href = `/parks?${new URLSearchParams({
     ...(destination && { city: destination }),
+    ...(date && { date }),
+    ...(guests && { guests }),
   })}`;
 
   if (compact) {

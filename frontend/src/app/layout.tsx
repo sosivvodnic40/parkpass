@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="ru" className={`${jakarta.variable} ${playfair.variable}`}>
       <body className="font-sans min-h-screen flex flex-col">
         <Navbar />
-        <div className="flex-1">{children}</div>
+        <div className="flex-1 flex flex-col min-h-0">{children}</div>
         <Footer />
       </body>
     </html>

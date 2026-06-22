@@ -4,15 +4,20 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { clearSession, getUser, type User } from '@/lib/auth';
+import { isHarryPotterRoute, isJurassicRoute, isMarvelRoute, isStarWarsRoute } from '@/lib/theme-routes';
+import JurassicNavbar from '@/components/JurassicNavbar';
+import MarvelNavbar from '@/components/MarvelNavbar';
+import StarWarsNavbar from '@/components/StarWarsNavbar';
+import HarryPotterNavbar from '@/components/HarryPotterNavbar';
 
 const links = [
   { href: '/parks', label: 'Парки' },
-  { href: '/parks/disney', label: 'Disney' },
   { href: '/worlds/star-wars', label: 'Star Wars' },
+  { href: '/worlds/harry-potter', label: 'Harry Potter' },
   { href: '/favorites', label: 'Избранное' },
 ];
 
-export default function Navbar() {
+function DefaultNavbar() {
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -56,8 +61,9 @@ export default function Navbar() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                 pathname === l.href ||
                 pathname.startsWith(l.href + '?') ||
-                (l.href === '/parks/disney' && pathname.startsWith('/parks/') && pathname.includes('disney')) ||
-                (l.href === '/worlds/star-wars' && pathname.startsWith('/worlds/star-wars'))
+                (l.href === '/parks' && pathname.startsWith('/parks')) ||
+                (l.href === '/worlds/star-wars' && pathname.startsWith('/worlds/star-wars')) ||
+                (l.href === '/worlds/harry-potter' && pathname.startsWith('/worlds/harry-potter'))
                   ? 'bg-white text-brand-accent shadow-sm'
                   : 'text-brand-muted hover:text-brand-text'
               }`}
@@ -95,4 +101,26 @@ export default function Navbar() {
       </nav>
     </header>
   );
+}
+
+export default function Navbar() {
+  const pathname = usePathname();
+
+  if (isStarWarsRoute(pathname)) {
+    return <StarWarsNavbar />;
+  }
+
+  if (isHarryPotterRoute(pathname)) {
+    return <HarryPotterNavbar />;
+  }
+
+  if (isMarvelRoute(pathname)) {
+    return <MarvelNavbar />;
+  }
+
+  if (isJurassicRoute(pathname)) {
+    return <JurassicNavbar />;
+  }
+
+  return <DefaultNavbar />;
 }

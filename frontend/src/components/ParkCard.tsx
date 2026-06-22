@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Park } from '@/lib/api';
+import { getParkPageHref } from '@/lib/worlds';
 
 export default function ParkCard({
   park,
@@ -11,7 +12,7 @@ export default function ParkCard({
 }) {
   return (
     <Link
-      href={`/parks/${park.slug}`}
+      href={getParkPageHref(park)}
       className={`card group hover:shadow-card-hover transition-all duration-300 block ${
         large ? 'md:row-span-2' : ''
       }`}

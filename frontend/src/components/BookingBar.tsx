@@ -15,7 +15,7 @@ export default function BookingBar({
   const [guests, setGuests] = useState(2);
   const [date, setDate] = useState('');
 
-  const checkoutUrl = `/checkout?park=${slug}&guests=${guests}${date ? `&date=${date}` : ''}`;
+  const checkoutUrl = `/checkout/${slug}?guests=${guests}${date ? `&date=${date}` : ''}`;
 
   return (
     <div className="sticky top-16 z-40 bg-white border-b border-brand-border shadow-[0_-4px_24px_rgba(0,0,0,.06)]">
