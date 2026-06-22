@@ -1,25 +1,37 @@
-/** Кураторские фото Unsplash */
+/** Стабильные изображения через picsum (Unsplash часто отдаёт 404) */
+const pic = (seed: string, w = 1200, h = 800) =>
+  `https://picsum.photos/seed/${seed}/${w}/${h}`;
+
 export const images = {
   hero: {
-    main: 'https://images.unsplash.com/photo-1596422846544-e75c642afc16?w=1920&q=85',
-    side1: 'https://images.unsplash.com/photo-1513885541842-4b030c4d1746?w=800&q=85',
-    side2: 'https://images.unsplash.com/photo-1536092029617-efc5efebfcfe?w=800&q=85',
-  },
-  disney: {
-    hub: 'https://images.unsplash.com/photo-1513885541842-4b030c4d1746?w=1920&q=85',
-    paris: 'https://images.unsplash.com/photo-1596422846544-e75c642afc16?w=1400&q=85',
-    california: 'https://images.unsplash.com/photo-1536092029617-efc5efebfcfe?w=1400&q=85',
-    orlando: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1400&q=85',
-    tokyo: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1400&q=85',
-    hongkong: 'https://images.unsplash.com/photo-1528183429752-a97d0bf99b5a?w=1400&q=85',
+    main: pic('hero-main', 1920, 1080),
+    side1: pic('hero-side-hp', 800, 600),
+    side2: pic('hero-side-jp', 800, 600),
   },
   starWars: {
-    hero: 'https://images.unsplash.com/photo-1446776811673-644aa332fba8?w=1920&q=90',
-    falcon: 'https://images.unsplash.com/photo-1534796998761-917e5d111861?w=1200&q=85',
-    resistance: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&q=85',
-    cantina: 'https://images.unsplash.com/photo-1518709268805-4e9042af9ee5?w=1200&q=85',
-    lightsaber: 'https://images.unsplash.com/photo-1506318137071-a8e63c84fe8e?w=1200&q=85',
-    outpost: 'https://images.unsplash.com/photo-1419242902214-272b403eb440?w=1400&q=85',
+    hero: '/star-wars/hero-mando.png',
+    falcon: '/star-wars/image_fc20bfb1.jpeg',
+    resistance: '/star-wars/resistance-supply-helmet-16x9.avif',
+    cantina: '/star-wars/4027219_0514ZR_4832MS_aRGB_R3R-16x9.avif',
+    lightsaber: '/star-wars/mando.jpeg',
   },
-  cta: 'https://images.unsplash.com/photo-1521248756001-4bdb1dd6c8e9?w=1920&q=85',
+  harryPotter: {
+    hero: 'https://images.unsplash.com/photo-1742322276273-749b62e782c0?w=900&h=600&fit=crop&auto=format',
+    castle: 'https://images.unsplash.com/photo-1668711495033-2aceccc63054?w=600&h=300&fit=crop&auto=format',
+    alley: 'https://images.unsplash.com/photo-1618945034890-91dea432cf7a?w=600&h=300&fit=crop&auto=format',
+  },
+  marvel: {
+    hero: pic('marvel-hero', 1920, 1080),
+  },
+  jurassic: {
+    hero: pic('jurassic-hero', 1920, 1080),
+  },
+  cta: pic('cta-footer', 1920, 1080),
 } as const;
+
+export const universes = [
+  { id: 'star-wars', name: 'Star Wars', emoji: '⚡', href: '/worlds/star-wars', color: '#FFE81F', desc: "Galaxy's Edge — Батуу" },
+  { id: 'harry-potter', name: 'Harry Potter', emoji: '🪄', href: '/worlds/harry-potter', color: '#B45309', desc: 'Хогвартс и Хогсмид' },
+  { id: 'marvel', name: 'Marvel', emoji: '🦸', href: '/worlds/marvel', color: '#DC2626', desc: 'Avengers Campus' },
+  { id: 'jurassic', name: 'Jurassic World', emoji: '🦕', href: '/worlds/jurassic', color: '#166534', desc: 'VelociCoaster и динозавры' },
+] as const;
