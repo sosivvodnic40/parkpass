@@ -1,23 +1,29 @@
-import express from 'express';
-import cors from 'cors';
-import parksRouter from './routes/parks';
-import authRouter from './routes/auth';
-import bookingsRouter from './routes/bookings';
+import { createApp } from './app';
+import { initDb, dbIsReady } from './db/pool';
+import { seedDatabase } from './db/seed';
 
-const app = express();
 const PORT = process.env.PORT ?? 4000;
 
-app.use(cors({ origin: process.env.FRONTEND_URL ?? 'http://localhost:3000' }));
-app.use(express.json());
+async function start() {
+  const connected = await initDb();
+  if (connected) {
+    try {
+      await seedDatabase();
+    } catch (err) {
+      console.error('[seed] Failed:', err);
+    }
+  }
 
-app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'parkpass-api', version: '1.0.0' });
-});
+  const app = createApp();
+  app.listen(PORT, () => {
+    console.log(`ParkPass API v2.1 → http://127.0.0.1:${PORT}`);
+    console.log(`Mode: ${dbIsReady() ? 'PostgreSQL' : 'in-memory mock'}`);
+  });
+}
 
-app.use('/api/v1/parks', parksRouter);
-app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/bookings', bookingsRouter);
-
-app.listen(PORT, () => {
-  console.log(`ParkPass API running on http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  start().catch((err) => {
+    console.error('Failed to start:', err);
+    process.exit(1);
+  });
+}
