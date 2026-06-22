@@ -2,6 +2,7 @@ node_modules/
 dist/
 build/
 .next/
+.next-build/
 .env
 .env.local
 *.log
@@ -11,3 +12,4 @@ Thumbs.db
 .vscode/
 coverage/
 *.sqlite
+*.tsbuildinfo
