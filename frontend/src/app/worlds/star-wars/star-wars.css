@@ -1,0 +1,177 @@
+/* Star Wars universe page — cinematic theme */
+body.sw-theme {
+  background-color: #050508;
+}
+
+.sw-page {
+  --sw-bg: #050508;
+  --sw-surface: #0c0c14;
+  --sw-gold: #ffe81f;
+  --sw-gold-dim: rgba(255, 232, 31, 0.15);
+  --sw-border: rgba(255, 255, 255, 0.08);
+  background: var(--sw-bg);
+  color: #f5f5f4;
+}
+
+.sw-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.sw-hero-bg {
+  animation: sw-ken-burns 24s ease-in-out infinite alternate;
+}
+
+@keyframes sw-ken-burns {
+  from {
+    transform: scale(1.02);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.sw-stars {
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1px 1px at 30% 65%, rgba(255, 232, 31, 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 55% 15%, white, transparent),
+    radial-gradient(1px 1px at 75% 45%, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 90% 80%, rgba(255, 232, 31, 0.5), transparent);
+  background-size: 220px 220px;
+  animation: sw-twinkle 8s ease-in-out infinite alternate;
+}
+
+@keyframes sw-twinkle {
+  to {
+    opacity: 0.5;
+  }
+}
+
+.sw-glass {
+  background: rgba(12, 12, 20, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--sw-border);
+}
+
+.sw-glow-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--sw-gold) 20%,
+    var(--sw-gold) 80%,
+    transparent
+  );
+}
+
+.sw-title-glow {
+  text-shadow: 0 0 60px rgba(255, 232, 31, 0.25);
+}
+
+.sw-card-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.sw-scroll-hint {
+  animation: sw-bounce 2s ease-in-out infinite;
+}
+
+@keyframes sw-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+
+.sw-carousel {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 232, 31, 0.4) transparent;
+}
+
+.sw-carousel::-webkit-scrollbar {
+  height: 6px;
+}
+
+.sw-carousel::-webkit-scrollbar-thumb {
+  background: rgba(255, 232, 31, 0.35);
+  border-radius: 3px;
+}
+
+.sw-footer-fade {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(5, 5, 8, 0.5) 40%,
+    #050508 100%
+  );
+}
+
+/* Футер — звёздное небо с переливом */
+.sw-footer-stars {
+  background-image:
+    radial-gradient(1px 1px at 5% 10%, rgba(255, 255, 255, 0.95), transparent),
+    radial-gradient(1px 1px at 15% 45%, rgba(255, 232, 31, 0.85), transparent),
+    radial-gradient(1.5px 1.5px at 25% 80%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1px 1px at 35% 25%, rgba(255, 232, 31, 0.7), transparent),
+    radial-gradient(1px 1px at 45% 60%, white, transparent),
+    radial-gradient(1.5px 1.5px at 55% 15%, rgba(255, 232, 31, 0.8), transparent),
+    radial-gradient(1px 1px at 65% 70%, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(1px 1px at 75% 35%, rgba(255, 232, 31, 0.65), transparent),
+    radial-gradient(1px 1px at 85% 55%, white, transparent),
+    radial-gradient(1.5px 1.5px at 95% 20%, rgba(255, 232, 31, 0.9), transparent);
+  background-size: 280px 280px;
+  animation: sw-footer-twinkle 6s ease-in-out infinite alternate;
+}
+
+.sw-footer-stars-2 {
+  background-image:
+    radial-gradient(1px 1px at 12% 30%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 42% 85%, rgba(255, 232, 31, 0.5), transparent),
+    radial-gradient(1px 1px at 68% 12%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 88% 75%, rgba(255, 232, 31, 0.45), transparent);
+  background-size: 360px 360px;
+  animation: sw-footer-twinkle 9s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes sw-footer-twinkle {
+  0% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0.55;
+  }
+}
+
+/* Туманность только в футере — без фиолетового и без пятна по центру */
+.sw-footer-nebula {
+  background: radial-gradient(
+    ellipse 80% 50% at 50% 100%,
+    rgba(255, 232, 31, 0.03) 0%,
+    transparent 65%
+  );
+}
+
+.sw-footer-top-glow {
+  height: 120px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 232, 31, 0.04) 50%,
+    rgba(5, 5, 8, 0.8) 100%
+  );
+  pointer-events: none;
+}
