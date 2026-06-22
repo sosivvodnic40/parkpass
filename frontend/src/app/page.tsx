@@ -2,8 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import SearchBar from '@/components/SearchBar';
 import ParkCard from '@/components/ParkCard';
-import { getParks, getCategories } from '@/lib/api';
-import { images } from '@/lib/images';
+import { BACKEND_HINT, getParks, getCategories } from '@/lib/api';
+import { images, universes } from '@/lib/images';
 
 const trust = [
   {
@@ -51,7 +51,7 @@ export default async function HomePage() {
                 <span className="text-brand-accent italic">один клик</span>
               </h1>
               <p className="text-brand-muted text-lg mt-5 max-w-md leading-relaxed">
-                Сравните билеты в Magic Kingdom, Universal, Ferrari World и десятки других парков.
+                Star Wars, Harry Potter, Marvel и Jurassic World — Universal и Disney по всему миру.
               </p>
               <div className="mt-8">
                 <SearchBar />
@@ -98,35 +98,30 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Disney hub */}
+      {/* Кино-вселенные */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div>
-              <p className="section-label">✨ Disney</p>
-              <h2 className="section-title mt-2">Парки Disneyland по всему миру</h2>
+              <p className="section-label">🎬 Кино-вселенные</p>
+              <h2 className="section-title mt-2">Тематические миры Universal и Disney</h2>
             </div>
-            <Link href="/parks/disney" className="btn-outline shrink-0">
-              Все парки Disney →
+            <Link href="/parks" className="btn-outline shrink-0">
+              Все парки →
             </Link>
           </div>
-          <div className="grid md:grid-cols-3 gap-4">
-            {[
-              { name: 'Disneyland Paris', img: images.disney.paris, href: '/parks/disneyland-paris', price: 99 },
-              { name: 'Disneyland California', img: images.disney.california, href: '/parks/disneyland-california', price: 124 },
-              { name: 'Walt Disney World', img: images.disney.orlando, href: '/parks/walt-disney-world', price: 129 },
-            ].map((d) => (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {universes.map((u) => (
               <Link
-                key={d.href}
-                href={d.href}
-                className="group relative h-56 rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition"
+                key={u.id}
+                href={u.href}
+                className="group card p-6 hover:shadow-card-hover transition border-2 border-transparent hover:border-brand-accent/20"
               >
-                <Image src={d.img} alt={d.name} fill className="object-cover group-hover:scale-105 transition duration-500" sizes="400px" />
-                <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/90 to-transparent" />
-                <div className="absolute bottom-0 p-5 text-white">
-                  <p className="font-bold text-lg">{d.name}</p>
-                  <p className="text-sm text-white/70 mt-1">от {d.price} € / чел.</p>
-                </div>
+                <span className="text-3xl">{u.emoji}</span>
+                <p className="font-bold text-lg text-brand-navy mt-3 group-hover:text-brand-accent transition">
+                  {u.name}
+                </p>
+                <p className="text-sm text-brand-muted mt-1">{u.desc}</p>
               </Link>
             ))}
           </div>
@@ -161,7 +156,7 @@ export default async function HomePage() {
           <h2 className="section-title mt-2 mb-10">Лучшие парки недели</h2>
 
           {parks.length === 0 ? (
-            <p className="text-brand-muted p-8 card">Запустите backend: cd backend && npm run dev</p>
+            <p className="text-brand-muted p-8 card">{BACKEND_HINT}</p>
           ) : (
             <div className="grid md:grid-cols-2 gap-6">
               {main && (
