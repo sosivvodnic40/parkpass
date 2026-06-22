@@ -44,6 +44,11 @@ CREATE TABLE parks (
     review_count    INTEGER DEFAULT 0,
     price_from      DECIMAL(10, 2),
     opening_hours   JSONB,
+    category        VARCHAR(50),
+    brand           VARCHAR(50) DEFAULT 'universal',
+    badge           VARCHAR(100),
+    region          VARCHAR(255),
+    zones           SMALLINT DEFAULT 1,
     is_featured     BOOLEAN DEFAULT FALSE,
     is_active       BOOLEAN DEFAULT TRUE,
     created_at      TIMESTAMPTZ DEFAULT NOW(),
@@ -55,6 +60,7 @@ CREATE TABLE attractions (
     id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     park_id         UUID NOT NULL REFERENCES parks(id) ON DELETE CASCADE,
     slug            VARCHAR(150) NOT NULL,
+    code            VARCHAR(50) NOT NULL,
     name            VARCHAR(255) NOT NULL,
     description     TEXT,
     image_url       TEXT,
@@ -67,21 +73,25 @@ CREATE TABLE attractions (
     requires_fast_pass BOOLEAN DEFAULT FALSE,
     is_active       BOOLEAN DEFAULT TRUE,
     created_at      TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE (park_id, slug)
+    UNIQUE (park_id, slug),
+    UNIQUE (park_id, code)
 );
 
 -- TICKET TYPES (products)
 CREATE TABLE ticket_types (
     id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     park_id         UUID NOT NULL REFERENCES parks(id) ON DELETE CASCADE,
+    code            VARCHAR(50) NOT NULL,
     name            VARCHAR(150) NOT NULL,
     description     TEXT,
     price           DECIMAL(10, 2) NOT NULL,
     currency        VARCHAR(3) DEFAULT 'EUR',
+    features        JSONB DEFAULT '[]',
     valid_days      INTEGER DEFAULT 1,
     includes_fast_pass BOOLEAN DEFAULT FALSE,
     quota_daily     INTEGER,
-    is_active       BOOLEAN DEFAULT TRUE
+    is_active       BOOLEAN DEFAULT TRUE,
+    UNIQUE (park_id, code)
 );
 
 -- BOOKINGS
@@ -130,6 +140,8 @@ CREATE TABLE favorites (
 );
 
 -- INDEXES
+CREATE INDEX idx_parks_category ON parks(category);
+CREATE INDEX idx_parks_brand ON parks(brand);
 CREATE INDEX idx_parks_city ON parks(city);
 CREATE INDEX idx_parks_country ON parks(country);
 CREATE INDEX idx_parks_rating ON parks(rating_avg DESC);
