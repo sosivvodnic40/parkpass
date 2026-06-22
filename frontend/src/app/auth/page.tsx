@@ -1,14 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, Suspense } from 'react';
 import { saveSession } from '@/lib/auth';
+import { BACKEND_HINT, safeFetch } from '@/lib/api';
+import { API_BASE } from '@/lib/config';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
-
-export default function AuthPage() {
+function AuthForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextUrl = searchParams.get('next') ?? '/account';
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('demo@parkpass.ru');
   const [password, setPassword] = useState('demo123');
@@ -21,15 +23,18 @@ export default function AuthPage() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(`${API}/api/v1/auth/${mode === 'login' ? 'login' : 'register'}`, {
+      const res = await safeFetch(`${API_BASE}/api/v1/auth/${mode === 'login' ? 'login' : 'register'}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, firstName, lastName: '' }),
       });
+      if (!res) {
+        throw new Error(`Сервер недоступен. ${BACKEND_HINT}`);
+      }
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Ошибка');
       saveSession(data.token, data.user);
-      router.push('/account');
+      router.push(nextUrl.startsWith('/') ? nextUrl : '/account');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка входа');
     } finally {
@@ -44,7 +49,7 @@ export default function AuthPage() {
           {mode === 'login' ? 'Вход' : 'Регистрация'}
         </h1>
         <p className="text-brand-muted text-sm mb-6">
-          Демо: demo@parkpass.ru / demo123
+          Демо: demo@parkpass.ru / demo123 · Админ: admin@parkpass.ru / admin123
         </p>
 
         <form onSubmit={submit} className="space-y-4">
@@ -80,5 +85,13 @@ export default function AuthPage() {
         </Link>
       </div>
     </main>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<main className="py-16 px-6 text-center text-brand-muted">Загрузка...</main>}>
+      <AuthForm />
+    </Suspense>
   );
 }

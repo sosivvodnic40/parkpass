@@ -3,27 +3,24 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import ParkCard from '@/components/ParkCard';
-import { getFavorites } from '@/lib/auth';
-import type { Park } from '@/lib/api';
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+import { getParks, type Park } from '@/lib/api';
+import { getFavorites, loadFavoritesFromApi } from '@/lib/auth';
 
 export default function FavoritesPage() {
   const [parks, setParks] = useState<Park[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const slugs = getFavorites();
-    if (slugs.length === 0) {
+    (async () => {
+      const slugs = await loadFavoritesFromApi().catch(() => getFavorites());
+      if (slugs.length === 0) {
+        setLoading(false);
+        return;
+      }
+      const all = await getParks();
+      setParks(all.filter((p) => slugs.includes(p.slug)));
       setLoading(false);
-      return;
-    }
-    fetch(`${API}/api/v1/parks`)
-      .then((r) => r.json())
-      .then((json: { data: Park[] }) => {
-        setParks(json.data.filter((p) => slugs.includes(p.slug)));
-      })
-      .finally(() => setLoading(false));
+    })();
   }, []);
 
   return (
@@ -37,7 +34,9 @@ export default function FavoritesPage() {
         ) : parks.length === 0 ? (
           <div className="card p-12 text-center">
             <p className="text-brand-muted mb-4">Пока нет избранных парков</p>
-            <Link href="/parks" className="btn-primary">Смотреть каталог</Link>
+            <Link href="/parks" className="btn-primary">
+              Смотреть каталог
+            </Link>
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

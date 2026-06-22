@@ -3,19 +3,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { getUser, type User } from '@/lib/auth';
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
-
-interface Booking {
-  id: string;
-  parkName: string;
-  visitDate: string;
-  guests: number;
-  totalAmount: number;
-  status: string;
-  qrCode: string;
-}
+import { getMyBookings, type Booking } from '@/lib/api';
+import { getToken, getUser, type User } from '@/lib/auth';
+import BookingQrCard from '@/components/BookingQrCard';
 
 const tierLabels: Record<string, string> = {
   bronze: 'Bronze',
@@ -31,15 +21,13 @@ export default function AccountPage() {
 
   useEffect(() => {
     const u = getUser();
-    if (!u) {
+    const token = getToken();
+    if (!u || !token) {
       router.replace('/auth');
       return;
     }
     setUser(u);
-    fetch(`${API}/api/v1/bookings/demo`)
-      .then((r) => r.json())
-      .then(setBookings)
-      .catch(() => setBookings([]));
+    getMyBookings(token).then(setBookings).catch(() => setBookings([]));
   }, [router]);
 
   if (!user) return null;
@@ -56,6 +44,11 @@ export default function AccountPage() {
               {user.firstName} {user.lastName}
             </p>
             <p className="text-brand-muted">{user.email}</p>
+            {(user.role === 'admin' || user.role === 'park_manager') && (
+              <Link href="/admin" className="inline-block mt-4 text-sm font-semibold text-brand-accent hover:underline">
+                Админ-панель →
+              </Link>
+            )}
           </div>
           <div className="card p-6 bg-gradient-to-br from-brand-accent/10 to-brand-navy/5">
             <p className="text-sm text-brand-muted">Клуб ParkPass</p>
@@ -71,20 +64,26 @@ export default function AccountPage() {
           {bookings.length === 0 ? (
             <div className="card p-8 text-center text-brand-muted">
               <p>Бронирований пока нет</p>
-              <Link href="/parks" className="btn-primary inline-block mt-4">Найти парки</Link>
+              <Link href="/parks" className="btn-primary inline-block mt-4">
+                Найти парки
+              </Link>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {bookings.map((b) => (
-                <div key={b.id} className="card p-5 flex flex-wrap justify-between gap-4 items-center">
-                  <div>
+                <div key={b.id} className="card p-5 flex flex-col md:flex-row gap-6 md:items-start md:justify-between">
+                  <div className="flex-1">
                     <p className="font-bold text-brand-navy">{b.parkName}</p>
                     <p className="text-sm text-brand-muted">
                       {b.visitDate} · {b.guests} гостей · {b.status}
+                      {b.ticketName ? ` · ${b.ticketName}` : ''}
                     </p>
-                    <p className="text-xs text-brand-muted mt-1 font-mono">QR: {b.qrCode}</p>
                   </div>
-                  <p className="text-xl font-bold tabular-nums">{b.totalAmount} €</p>
+                  {b.status !== 'cancelled' && b.qrCode ? (
+                    <BookingQrCard booking={b} className="md:items-end" />
+                  ) : (
+                    <p className="text-xl font-bold tabular-nums self-center">{b.totalAmount} €</p>
+                  )}
                 </div>
               ))}
             </div>
