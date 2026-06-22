@@ -1,22 +1,19 @@
 import Link from 'next/link';
 import ParkCard from '@/components/ParkCard';
 import SearchBar from '@/components/SearchBar';
-import { getParks, getCategories } from '@/lib/api';
+import { BACKEND_HINT, getParks, getCategories } from '@/lib/api';
 
 const categoryLabels: Record<string, string> = {
-  disney: 'Disneyland & Disney',
   'star-wars': 'Star Wars',
-  magical: 'Волшебные миры',
-  thrills: 'Экстрим',
-  water: 'Водные приключения',
-  family: 'Семейный отдых',
-  speed: 'Скорость и гонки',
+  'harry-potter': 'Harry Potter',
+  marvel: 'Marvel',
+  jurassic: 'Jurassic World',
 };
 
 export default async function ParksPage({
   searchParams,
 }: {
-  searchParams: { category?: string; city?: string };
+  searchParams: { category?: string; city?: string; date?: string; guests?: string };
 }) {
   const parks = await getParks({
     category: searchParams.category,
@@ -35,6 +32,8 @@ export default async function ParksPage({
           </h1>
           <p className="text-brand-muted mt-2">
             {parks.length} {parks.length === 1 ? 'парк' : parks.length < 5 ? 'парка' : 'парков'} · честные цены
+            {searchParams.date ? ` · дата ${searchParams.date}` : ''}
+            {searchParams.guests ? ` · ${searchParams.guests} гост.` : ''}
           </p>
         </div>
 
@@ -80,9 +79,13 @@ export default async function ParksPage({
           <div className="flex-1 grid sm:grid-cols-2 gap-6">
             {parks.length === 0 ? (
               <div className="col-span-2 card p-12 text-center">
-                <p className="text-brand-muted">Парки не найдены</p>
+                <p className="text-brand-muted">
+                  {activeCategory || searchParams.city
+                    ? 'Парки не найдены по выбранным фильтрам'
+                    : `Нет данных с API. ${BACKEND_HINT}`}
+                </p>
                 <Link href="/parks" className="btn-primary inline-block mt-4">
-                  Сбросить фильтры
+                  {activeCategory || searchParams.city ? 'Сбросить фильтры' : 'Обновить'}
                 </Link>
               </div>
             ) : (

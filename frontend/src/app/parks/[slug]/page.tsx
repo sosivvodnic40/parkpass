@@ -1,9 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import BookingBar from '@/components/BookingBar';
 import FavoriteButton from '@/components/FavoriteButton';
 import { getPark, getAttractions, getTickets } from '@/lib/api';
+import { worldHubByCategory } from '@/lib/worlds';
+import { checkoutPath } from '@/lib/checkout-path';
 
 export default async function ParkDetailPage({
   params,
@@ -13,8 +15,22 @@ export default async function ParkDetailPage({
   const park = await getPark(params.slug);
   if (!park) notFound();
 
+  if (park.category === 'star-wars') {
+    redirect('/worlds/star-wars');
+  }
+  if (park.category === 'harry-potter') {
+    redirect('/worlds/harry-potter');
+  }
+  if (park.category === 'marvel') {
+    redirect('/worlds/marvel');
+  }
+  if (park.category === 'jurassic') {
+    redirect('/worlds/jurassic');
+  }
+
   const isStarWars = park.category === 'star-wars';
-  const isDisney = park.brand === 'disney' || park.category === 'disney';
+  const worldHub = worldHubByCategory[park.category];
+  const accent = isStarWars ? '#FFE81F' : park.theme.primaryColor;
 
   const [attractions, tickets] = await Promise.all([
     getAttractions(params.slug),
@@ -46,22 +62,19 @@ export default async function ParkDetailPage({
           {park.badge && (
             <span
               className={`inline-block text-xs font-bold px-4 py-1.5 rounded-full mb-4 shadow-lg ${
-                isStarWars
-                  ? 'bg-[#FFE81F] text-[#0a0a12]'
-                  : isDisney
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-brand-coral text-white'
+                isStarWars ? 'bg-[#FFE81F] text-[#0a0a12]' : 'bg-brand-coral text-white'
               }`}
             >
               {park.badge}
             </span>
           )}
-          {isStarWars && (
+          {worldHub && (
             <Link
-              href="/worlds/star-wars"
-              className="inline-block text-[#FFE81F] text-sm font-semibold mb-3 hover:underline"
+              href={worldHub.href}
+              className="inline-block text-sm font-semibold mb-3 hover:underline"
+              style={{ color: isStarWars ? '#FFE81F' : accent }}
             >
-              ← Полная страница Galaxy&apos;s Edge
+              ← {worldHub.label}
             </Link>
           )}
           <h1
@@ -84,7 +97,7 @@ export default async function ParkDetailPage({
       <BookingBar
         slug={park.slug}
         priceFrom={park.priceFrom}
-        accentColor={isStarWars ? '#FFE81F' : park.theme.primaryColor}
+        accentColor={accent}
       />
 
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-14 space-y-20">
@@ -134,7 +147,7 @@ export default async function ParkDetailPage({
                   ))}
                 </ul>
                 <Link
-                  href={`/checkout?park=${park.slug}&ticket=${t.id}`}
+                  href={checkoutPath(park.slug, { ticket: t.id })}
                   className={`mt-8 text-center py-3.5 rounded-xl font-semibold ${
                     i === 1
                       ? isStarWars
