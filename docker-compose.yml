@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: parkpass-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: parkpass
+      POSTGRES_PASSWORD: parkpass
+      POSTGRES_DB: parkpass
+    ports:
+      - '5432:5432'
+    volumes:
+      - parkpass_pg:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+
+volumes:
+  parkpass_pg:
